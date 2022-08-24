@@ -1,16 +1,12 @@
-package main
+package etherman_test
 
 import (
-	"log"
-	"net"
-	"net/http"
-	"net/rpc"
 	"os"
+	"testing"
 
 	"github.com/cool-develope/dex-router/etherman"
-	"github.com/cool-develope/dex-router/server"
-	"github.com/cool-develope/dex-router/synchronizer"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -54,39 +50,17 @@ var pairs = []struct {
 	},
 }
 
-func main() {
+func TestEtherClient(t *testing.T) {
 	etherMan, err := etherman.NewClient(clientURL+os.Getenv("INFURA_KEY"), common.HexToAddress(factoryAddr))
-	if err != nil {
-		log.Default().Panic(err)
-	}
+	require.NoError(t, err)
 
 	for _, pair := range pairs {
 		_, err := etherMan.RegisterPair(common.HexToAddress(pair.tokenA), common.HexToAddress(pair.tokenB))
-		if err != nil {
-			log.Default().Panic(err)
-		}
+		require.NoError(t, err)
 	}
 
-	sync := synchronizer.NewClientSynchronizer(etherMan)
-	go sync.Sync()
-
-	handler := server.NewHandler(sync)
-
-	err = rpc.Register(handler)
-	if err != nil {
-		log.Default().Panic(err)
-	}
-
-	rpc.HandleHTTP()
-	//start listening for messages on port 1234
-	l, e := net.Listen("tcp", ":1234")
-	if e != nil {
-		log.Fatalf("Couldn't start listening on port 1234. Error %s", e)
-	}
-	log.Println("Serving RPC handler")
-	err = http.Serve(l, nil)
-	if err != nil {
-		log.Fatalf("Error serving: %s", err)
-	}
-
+	rates, err := etherMan.GetRates()
+	require.NoError(t, err)
+	require.Equal(t, len(pairs), len(rates))
+	t.Logf("rates : %v", rates)
 }

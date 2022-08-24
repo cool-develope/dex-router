@@ -8,8 +8,6 @@ gen() {
     abigen --bin bin/${package}.bin --abi abi/${package}.abi --pkg=${package} --out=${package}/${package}.go
 }
 
-gen proofofefficiency
-gen bridge
-gen matic
-gen globalexitrootmanager
-gen mockverifier
+gen factory
+gen pair
+gen ERC20
