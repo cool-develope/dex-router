@@ -22,7 +22,7 @@ lint: ## runs linter
 
 .PHONY: test
 test: ## Runs only short tests without checking race conditions
-	go test --cover -short -p 1 ./...
+	go test --cover -short -p 1 ./... -timeout 60s
 
 .PHONY: install-linter
 install-linter: ## Installs the linter
@@ -31,3 +31,11 @@ install-linter: ## Installs the linter
 .PHONY: gen-script
 gen-script: ## generate go files
 	cd ./etherman/uniswap ./script.sh
+
+.PHONY: run
+run: ## runs service
+	go run ./cmd/...
+
+.PHONY: test-e2e
+test-e2e:
+	go test ./... -timeout 1m -race -tags='e2e'

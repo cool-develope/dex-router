@@ -29,28 +29,28 @@ var pairs = []struct {
 	tokenB string
 }{
 	{
-		tokenA: USDC,
-		tokenB: WETH,
-	},
-	{
-		tokenA: WISE,
-		tokenB: WETH,
-	},
-	{
-		tokenA: DAI,
+		tokenA: WETH,
 		tokenB: USDC,
 	},
 	{
-		tokenA: DAI,
-		tokenB: WETH,
+		tokenA: WETH,
+		tokenB: WISE,
+	},
+	{
+		tokenA: USDC,
+		tokenB: DAI,
+	},
+	{
+		tokenA: WETH,
+		tokenB: DAI,
 	},
 	{
 		tokenA: USDC,
 		tokenB: USDT,
 	},
 	{
-		tokenA: WETH,
-		tokenB: USDT,
+		tokenA: USDT,
+		tokenB: WETH,
 	},
 }
 
